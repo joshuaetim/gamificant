@@ -4,35 +4,76 @@
     <div class="container mx-auto px-4">
         <div class="flex border-b border-gray-600 pb-12 lg:flex-row flex-col">
             <div class="flex-none">
-                <img src="images/single.jpg" alt="game cover">
+                @if (isset($game['cover']))
+                    <img src="{{$game['imageCover']}}" alt="game cover">
+                @endif
             </div>
             <div class="lg:ml-8 lg:mr-64 mt-4 lg:mt-0">
-                <h2 class="text-3xl font-semibold leading-tight">Assasins Creed Valhalla</h2>
+                <h2 class="text-3xl font-semibold leading-tight">{{$game['name']}}</h2>
                 <div class="text-gray-400 mt-1">
-                    <span>Adventure</span>
-                    &middot;
-                    <span>RPG thing</span>
-                    &middot;
-                    <span>Playstation IV</span>
+                    @if (isset($game['genres']))
+                        <span>
+                            {{$game['genres']}}
+
+                            &middot;
+                        </span>
+                    @endif
+
+                    @if (isset($game['company']))
+                        <span>
+                            {{$game['company']}}
+                            &middot;
+                        </span>
+                    @endif
+
+                    <span>
+                        @if (isset($game['platforms']))
+                            {{$game['abbreviations']}}
+                        @endif
+                    </span>
                 </div>
 
                 <div class="flex flex-wrap mt-8">
-                    <div class="flex items-center">
-                        <div class="w-16 h-16 bg-gray-800 rounded-full">
-                            <div class="font-semibold text-xs flex justify-center items-center h-full">90%</div>
+                    @if (isset($game['rating']))
+                        <div class="flex items-center">
+                            <div class="w-16 h-16 bg-gray-800 rounded-full">
+                                <div class="font-semibold text-xs flex justify-center items-center h-full">{{$game['rating']}}</div>
+                            </div>
+                            <div class="ml-4 text-xs">
+                                Member <br> Score
+                            </div>
                         </div>
-                        <div class="ml-4 text-xs">
-                            Member <br> Score
+                    @else
+                        <div class="flex items-center">
+                            <div class="w-16 h-16 bg-red-800 rounded-full">
+                                <div class="font-semibold text-xs flex justify-center items-center h-full">N/A</div>
+                            </div>
+                            <div class="ml-4 text-xs">
+                                Member <br> Score
+                            </div>
                         </div>
-                    </div>
-                    <div class="flex items-center ml-12">
-                        <div class="w-16 h-16 bg-gray-800 rounded-full">
-                            <div class="font-semibold text-xs flex justify-center items-center h-full">90%</div>
+                    @endif
+
+                    @if (isset($game['aggregated_rating']))
+                        <div class="flex items-center ml-12">
+                            <div class="w-16 h-16 bg-gray-800 rounded-full">
+                                <div class="font-semibold text-xs flex justify-center items-center h-full">{{$game['aggregated_rating']}}</div>
+                            </div>
+                            <div class="ml-4 text-xs">
+                                Critic <br> Score
+                            </div>
                         </div>
-                        <div class="ml-4 text-xs">
-                            Critic <br> Score
-                        </div>
-                    </div>
+                    @else
+                        <div class="flex items-center ml-12">
+                            <div class="w-16 h-16 bg-red-800 rounded-full">
+                                <div class="font-semibold text-xs flex justify-center items-center h-full">N/A</div>
+                            </div>
+                            <div class="ml-4 text-xs">
+                                Critic <br> Score
+                            </div>
+                        </div>    
+                    @endif
+                    
                     <div class="items-center space-x-4 flex lg:ml-12 mt-4 lg:mt-0">
                         <div class="w-8 h-8 flex justify-center items-center bg-gray-800 rounded-full">
                             <a href="" class="hover:text-gray-400">
@@ -57,44 +98,47 @@
                     </div>
                 </div>
                 <p class="mt-8">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae, dolor! Distinctio, soluta? Porro, rem. Consequuntur nam dolor commodi cumque quasi ab temporibus, animi, porro quo ipsa, nemo aliquam aut saepe!
+                    @if (isset($game['summary']))
+                        {{$game['summary']}}
+                    @endif
                 </p>
 
-                <div class="mt-12">
+                {{-- <div class="mt-12">
                     <button class="text-white flex bg-blue-400 hover:bg-blue-500 px-4 py-3 rounded transition ease-in-out duration-150">
                         <div>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="fill-current"><path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-3 17v-10l9 5.146-9 4.854z"/></svg>
                         </div>
                         <span class="ml-2">Play Trailer</span>
                     </button>
-                </div>
+                </div> --}}
+                @if (isset($game['videos']))
+                    <div class="mt-12">
+                        <a href="https://youtube.com/watch/{{$game['videos'][0]['video_id']}}" class="inline-flex text-white flex bg-blue-400 hover:bg-blue-500 px-4 py-3 rounded transition ease-in-out duration-150">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="fill-current"><path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-3 17v-10l9 5.146-9 4.854z"/></svg>
+                            </div>
+                            <span class="ml-2">Play Trailer</span>
+                        </a>
+                    </div>
+                @endif
             </div>
         </div>
 
         <div class="images border-b border-gray-700 pb-12">
-            <h2 class="tracking-wide text-blue-500 uppercase font-semibold mt-2">
-                Images
+            <h2 class="tracking-wide text-blue-500 uppercase font-semibold mt-4">
+                screenshots
             </h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-8">
-                <div>
-                    <img src="images/gamebanner.jpg" alt="banner" class="hover:opacity-75 transition ease-in-out duration-150">
-                </div>
-                <div>
-                    <img src="images/gamebanner.jpg" alt="banner" class="hover:opacity-75 transition ease-in-out duration-150">
-                </div>
-                <div>
-                    <img src="images/gamebanner.jpg" alt="banner" class="hover:opacity-75 transition ease-in-out duration-150">
-                </div>
-                <div>
-                    <img src="images/gamebanner.jpg" alt="banner" class="hover:opacity-75 transition ease-in-out duration-150">
-                </div>
-                <div>
-                    <img src="images/gamebanner.jpg" alt="banner" class="hover:opacity-75 transition ease-in-out duration-150">
-                </div>
-                <div>
-                    <img src="images/gamebanner.jpg" alt="banner" class="hover:opacity-75 transition ease-in-out duration-150">
-                </div>
+                @if (isset($game['screenshots']))
+                    @foreach ($game['screenshots'] as $screenshot)
+                        <div>
+                            <a href="{{Str::replaceFirst('thumb', 'screenshot_huge', $screenshot['url'])}}">
+                                <img src="{{Str::replaceFirst('thumb', 'screenshot_big', $screenshot['url'])}}" alt="banner" class="hover:opacity-75 transition ease-in-out duration-150">
+                            </a>
+                        </div>
+                    @endforeach
+                @endif
             </div>
         </div>
 
@@ -103,78 +147,33 @@
                 similar games
             </h2>
             <div class="popular-games grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 text-sm gap-12 pb-16">
-                <div class="game mt-8">
-                    <div class="relative inline-block">
-                        <a href="#">
-                            <img src="images/single.jpg" alt="game image" class="hover:opacity-75 transition ease-in-out duration-150">
-                        </a>
-                        <div class="absolute w-16 h-16 rounded-full bg-gray-800 bottom-0 right-0" style="bottom: -20px; right: -20px">
-                            <div class="font-semibold flex justify-center h-full items-center text-xs">70%</div>
+                @foreach ($game['similar_games'] as $game)
+                    <div class="game mt-8">
+                        <div class="relative inline-block">
+                            @if (isset($game['coverImage']))
+                                <a href="{{route('games.show', $game['slug'])}}">
+                                    <img src="{{$game['coverImage']}}" alt="game image" class="hover:opacity-75 transition ease-in-out duration-150">
+                                </a>
+                            @endif
+                            @if (isset($game['rating']))
+                                <div class="absolute w-16 h-16 rounded-full bg-gray-800 bottom-0 right-0" style="bottom: -20px; right: -20px">
+                                    <div class="font-semibold flex justify-center h-full items-center text-xs">{{$game['rating']}}</div>
+                                </div>
+                            @else
+                                <div class="absolute w-16 h-16 rounded-full bg-red-800 bottom-0 right-0" style="bottom: -20px; right: -20px">
+                                    <div class="font-semibold flex justify-center h-full items-center text-xs" title="No rating yet">N/A</div>
+                                </div>
+                            @endif
+                        </div>
+                        <a href="{{route('games.show', $game['slug'])}}" class="font-semibold text-base mt-8 block hover:text-gray-400 leading-tight">{{$game['name']}}</a>
+                        <div class="text-gray-400 mt-1">
+                            @if (isset($game['platforms']))
+                                {{$game['platforms']}}
+                            @endif
                         </div>
                     </div>
-                    <a href="#" class="font-semibold text-base mt-8 block hover:text-gray-400 leading-tight">Assasins Creed Valhalla</a>
-                    <div class="text-gray-400 mt-1">Playstation 4</div>
-                </div>
-                <div class="game mt-8">
-                    <div class="relative inline-block">
-                        <a href="#">
-                            <img src="images/single.jpg" alt="game image" class="hover:opacity-75 transition ease-in-out duration-150">
-                        </a>
-                        <div class="absolute w-16 h-16 rounded-full bg-gray-800 bottom-0 right-0" style="bottom: -20px; right: -20px">
-                            <div class="font-semibold flex justify-center h-full items-center text-xs">70%</div>
-                        </div>
-                    </div>
-                    <a href="#" class="font-semibold text-base mt-8 block hover:text-gray-400 leading-tight">Assasins Creed Valhalla</a>
-                    <div class="text-gray-400 mt-1">Playstation 4</div>
-                </div>
-                <div class="game mt-8">
-                    <div class="relative inline-block">
-                        <a href="#">
-                            <img src="images/single.jpg" alt="game image" class="hover:opacity-75 transition ease-in-out duration-150">
-                        </a>
-                        <div class="absolute w-16 h-16 rounded-full bg-gray-800 bottom-0 right-0" style="bottom: -20px; right: -20px">
-                            <div class="font-semibold flex justify-center h-full items-center text-xs">70%</div>
-                        </div>
-                    </div>
-                    <a href="#" class="font-semibold text-base mt-8 block hover:text-gray-400 leading-tight">Assasins Creed Valhalla</a>
-                    <div class="text-gray-400 mt-1">Playstation 4</div>
-                </div>
-                <div class="game mt-8">
-                    <div class="relative inline-block">
-                        <a href="#">
-                            <img src="images/single.jpg" alt="game image" class="hover:opacity-75 transition ease-in-out duration-150">
-                        </a>
-                        <div class="absolute w-16 h-16 rounded-full bg-gray-800 bottom-0 right-0" style="bottom: -20px; right: -20px">
-                            <div class="font-semibold flex justify-center h-full items-center text-xs">70%</div>
-                        </div>
-                    </div>
-                    <a href="#" class="font-semibold text-base mt-8 block hover:text-gray-400 leading-tight">Assasins Creed Valhalla</a>
-                    <div class="text-gray-400 mt-1">Playstation 4</div>
-                </div>
-                <div class="game mt-8">
-                    <div class="relative inline-block">
-                        <a href="#">
-                            <img src="images/single.jpg" alt="game image" class="hover:opacity-75 transition ease-in-out duration-150">
-                        </a>
-                        <div class="absolute w-16 h-16 rounded-full bg-gray-800 bottom-0 right-0" style="bottom: -20px; right: -20px">
-                            <div class="font-semibold flex justify-center h-full items-center text-xs">70%</div>
-                        </div>
-                    </div>
-                    <a href="#" class="font-semibold text-base mt-8 block hover:text-gray-400 leading-tight">Assasins Creed Valhalla</a>
-                    <div class="text-gray-400 mt-1">Playstation 4</div>
-                </div>
-                <div class="game mt-8">
-                    <div class="relative inline-block">
-                        <a href="#">
-                            <img src="images/single.jpg" alt="game image" class="hover:opacity-75 transition ease-in-out duration-150">
-                        </a>
-                        <div class="absolute w-16 h-16 rounded-full bg-gray-800 bottom-0 right-0" style="bottom: -20px; right: -20px">
-                            <div class="font-semibold flex justify-center h-full items-center text-xs">70%</div>
-                        </div>
-                    </div>
-                    <a href="#" class="font-semibold text-base mt-8 block hover:text-gray-400 leading-tight">Assasins Creed Valhalla</a>
-                    <div class="text-gray-400 mt-1">Playstation 4</div>
-                </div>
+                    <!-- end game info -->
+                @endforeach
                 
             </div>
         </div>

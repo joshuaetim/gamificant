@@ -2,13 +2,13 @@
     @forelse ($mostAnticipated as $game)
         <div class="game-info flex">
             <div>
-                <a href="#">
-                    <img src="{{$game['cover']['url']}}" alt="single" class="w-16 hover:opacity-75 transition ease-in-out duration-150">
+                <a href="{{route('games.show', $game['slug'])}}">
+                    <img src="{{$game['imageCover']}}" alt="single" class="w-16 hover:opacity-75 transition ease-in-out duration-150">
                 </a>
             </div>
             <div class="ml-4">
-                <a href="#" class="font-semibold hover:text-gray-300 text-gray-100">{{$game['name']}}</a>
-                <p class="text-xs text-gray-400 mt-1">{{carbonFormat($game['first_release_date'])->toFormattedDateString()}}</p>
+                <a href="{{route('games.show', $game['slug'])}}" class="font-semibold hover:text-gray-300 text-gray-100">{{$game['name']}}</a>
+                <p class="text-xs text-gray-400 mt-1">{{$game['first_release_date']}}</p>
             </div>
         </div>
         {{-- end game info --}}

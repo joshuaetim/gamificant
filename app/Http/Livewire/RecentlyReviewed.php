@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Livewire\Component;
+use Illuminate\Support\Str;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Cache;
 use MarcReichel\IGDBLaravel\Models\Game;
@@ -28,10 +29,11 @@ class RecentlyReviewed extends Component
                     'Authorization' => 'Bearer 9duwqah8hth0fsfj2h9w11749ugvrz'
                 ],
                 'body' => "
-                    fields name, rating, cover.*, summary, platforms.*;
+                    fields name, rating, cover.*, summary, platforms.*, slug;
                     where rating_count >= 3
                     & first_release_date >= {$recent}
-                    & first_release_date < {$now};
+                    & first_release_date < {$now}
+                    & cover != null;
                     sort first_release_date desc;
                     limit 3;
                 ",
@@ -41,8 +43,23 @@ class RecentlyReviewed extends Component
 
             return collect($response->json());
         });
+
+        $this->recentlyReviewed = $this->viewFormat($this->recentlyReviewed);
     }
     
+    public function viewFormat($games)
+    {
+        $games = collect($games);
+
+        return $games->map(function($game){
+            return collect($game)->merge([
+                'imageCover' => Str::replaceFirst('thumb', 'cover_big', $game['cover']['url']),
+                'rating' => isset($game['rating']) ? round($game['rating']).'%' : null,
+                'abbreviations' => collect($game['platforms'])->pluck('abbreviation')->implode(', ')
+            ]);
+        });
+    }
+
     public function render()
     {
         return view('livewire.recently-reviewed', [

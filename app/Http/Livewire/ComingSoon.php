@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Livewire\Component;
+use Illuminate\Support\Str;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Cache;
 use MarcReichel\IGDBLaravel\Models\Game;
@@ -27,9 +28,10 @@ class ComingSoon extends Component
                     'Authorization' => 'Bearer 9duwqah8hth0fsfj2h9w11749ugvrz'
                 ],
                 'body' => "
-                    fields name, first_release_date, cover.*;
+                    fields name, first_release_date, cover.*, slug;
                     where first_release_date >= {$now}
-                    & first_release_date < {$after};
+                    & first_release_date < {$after}
+                    & cover != null;
                     sort first_release_date desc;
                     limit 3;
                 ",
@@ -38,6 +40,20 @@ class ComingSoon extends Component
             $response = new Response($response);
 
             return collect($response->json());
+        });
+
+        $this->comingSoon = $this->viewFormat($this->comingSoon);
+    }
+
+    public function viewFormat($games)
+    {
+        $games = collect($games);
+        
+        return $games->map(function($game){
+            return collect($game)->merge([
+                'imageCover' => Str::replaceFirst('thumb', 'cover_big', $game['cover']['url']),
+                'first_release_date' => Carbon::parse($game['first_release_date'])->toFormattedDateString(),
+            ]);
         });
     }
 

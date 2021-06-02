@@ -1,4 +1,4 @@
-<div wire:init="loadPopularGames" class="popular-games grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 border-b border-gray-400 text-sm gap-12 pb-16">
+<div class="popular-games grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 border-b border-gray-400 text-sm gap-12 pb-16">
     @forelse ($popularGames as $game)
         <div class="game mt-8">
             <div class="relative inline-block">

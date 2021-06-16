@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use App\Classes\PopularGames;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
-use MarcReichel\IGDBLaravel\Models\Game;
 
 class GameController extends Controller
 {
@@ -20,15 +19,6 @@ class GameController extends Controller
     public function index()
     {
         return view('index');
-    }
-
-    public function fetchPopularGames()
-    {
-        $popularGames = PopularGames::getGames();
-
-        return view('popular-games', [
-            'popularGames' => $popularGames,
-        ]);
     }
 
     /**
@@ -46,7 +36,7 @@ class GameController extends Controller
                 'Authorization' => 'Bearer '.env('IGDB_ACCESS_TOKEN'),
             ],
             'body' => "
-                fields *, cover.url, genres.name, involved_companies.company.name, platforms.*, rating, aggregated_rating, summary, videos.*, screenshots.*, similar_games.*, similar_games.cover.*, similar_games.platforms.*;
+                fields name, cover.url, genres.name, involved_companies.company.name, platforms.*, rating, aggregated_rating, summary, videos.*, screenshots.*, similar_games.*, similar_games.cover.*, similar_games.platforms.*, websites.*;
                 where slug=\"{$slug}\";
             ",
         ]);
@@ -71,21 +61,39 @@ class GameController extends Controller
         $game = collect($game);
 
         return $game->merge([
-            'imageCover' => Str::replaceFirst('thumb', 'cover_big', $game['cover']['url']),
-            'rating' => isset($game['rating']) ? round($game['rating']).'%' : null,
-            'aggregated_rating' => isset($game['aggregated_rating']) ? round($game['aggregated_rating']).'%' : null,
-            'abbreviations' => collect($game['platforms'])->pluck('abbreviation')->implode(', '),
+            'imageCover' => isset($game['cover']) ? Str::replaceFirst('thumb', 'cover_big', $game['cover']['url']) : null,
+            'rating' => isset($game['rating']) ? round($game['rating']) : null,
+            'aggregated_rating' => isset($game['aggregated_rating']) ? round($game['aggregated_rating']) : null,
+            'abbreviations' => isset($game['platforms']) ? collect($game['platforms'])->pluck('abbreviation')->implode(', ') : null,
             'company' => isset($game['involved_companies']) ? $game['involved_companies'][0]['company']['name'] : null,
             'genres' => isset($game['genres']) ? collect($game['genres'])->pluck('name')->implode(', ') : null,
-            'similar_games' => collect($game['similar_games'])->map(function($game){
+            'trailer' => "https://youtube.com/embed/".$game['videos'][0]['video_id'],
+            'similar_games' => isset($game['similar_games']) ? collect($game['similar_games'])->map(function($game){
                 return [
                     'slug' => $game['slug'],
                     'coverImage' => isset($game['cover']['url']) ? Str::replaceFirst('thumb', 'cover_big', $game['cover']['url']) : null,
                     'name' => $game['name'],
                     'platforms' => isset($game['platforms']) ? collect($game['platforms'])->pluck('abbreviation')->implode(', ') : null,
-                    'rating' => isset($game['rating']) ? round($game['rating']).'%' : null,
+                    'rating' => isset($game['rating']) ? round($game['rating']) : null,
                 ];
-            })->take(6)
+            })->take(6) : [],
+            'socials' => isset($game['websites']) ? [
+                'website' => collect($game['websites'])->first(),
+                'facebook' => collect($game['websites'])->filter(function($website){
+                    return Str::contains($website['url'], 'facebook');
+                })->first(),
+                'twitter' => collect($game['websites'])->filter(function($website){
+                    return Str::contains($website['url'], 'twitter');
+                })->first(),
+                'instagram' => collect($game['websites'])->filter(function($website){
+                    return Str::contains($website['url'], 'instagram');
+                })->first(),
+            ] : [
+                'website' => null,
+                'facebook' => null,
+                'twitter' => null,
+                'instagram' => null,
+            ],
         ]);
     }
 }

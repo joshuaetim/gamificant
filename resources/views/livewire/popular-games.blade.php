@@ -6,8 +6,11 @@
                     <img src="{{$game['imageCover']}}" alt="game image" class="hover:opacity-75 transition ease-in-out duration-150">
                 </a>
                 @if (isset($game['rating']))
-                    <div class="absolute w-16 h-16 rounded-full bg-gray-800 bottom-0 right-0" style="bottom: -20px; right: -20px">
-                        <div class="font-semibold flex justify-center h-full items-center text-xs">{{$game['rating']}}</div>
+                    <div id="{{$game['slug']}}" class="absolute w-16 h-16 rounded-full bg-gray-800 bottom-0 right-0 text-xs font-semibold" style="bottom: -20px; right: -20px">
+                        @include('partials.rating', [
+                            'slug' => $game['slug'],
+                            'rating' => $game['rating'],
+                        ])
                     </div>
                 @else
                     <div class="absolute w-16 h-16 rounded-full bg-red-800 bottom-0 right-0" style="bottom: -20px; right: -20px">

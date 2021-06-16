@@ -131,9 +131,9 @@
                         <span class="ml-2">Play Trailer</span>
                     </button>
                 </div> --}}
-                @if (isset($game['videos']))
+                @if (isset($game['trailer']))
                     <div class="mt-12">
-                        <a href="https://youtube.com/watch/{{$game['videos'][0]['video_id']}}" class="inline-flex text-white flex bg-blue-400 hover:bg-blue-500 px-4 py-3 rounded transition ease-in-out duration-150" target="_blank">
+                        <a href="https://youtube.com/watch/{{$game['trailer']}}" class="inline-flex text-white flex bg-blue-400 hover:bg-blue-500 px-4 py-3 rounded transition ease-in-out duration-150" target="_blank">
                             <div>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="fill-current"><path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-3 17v-10l9 5.146-9 4.854z"/></svg>
                             </div>

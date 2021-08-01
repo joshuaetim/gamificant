@@ -24,8 +24,8 @@ class ComingSoon extends Component
             $client = new Client();
             $response = $client->request('POST', 'https://api.igdb.com/v4/games', [
                 'headers' => [
-                    'Client-ID' => 'ilkptgvx2ijd5uxydk5yuguo7vofn9',
-                    'Authorization' => 'Bearer 9duwqah8hth0fsfj2h9w11749ugvrz'
+                    'Client-ID' => env('IGDB_CLIENT_ID'),
+                    'Authorization' => 'Bearer '.env('IGDB_ACCESS_TOKEN'),
                 ],
                 'body' => "
                     fields name, first_release_date, cover.*, slug;

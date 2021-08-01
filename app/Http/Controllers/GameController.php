@@ -18,7 +18,9 @@ class GameController extends Controller
      */
     public function index()
     {
-        return view('index');
+        return view('index', [
+            'title' => 'Home Page'
+        ]);
     }
 
     /**
@@ -52,7 +54,8 @@ class GameController extends Controller
         // dump($game);
 
         return view('show', [
-            'game' => $game
+            'game' => $game,
+            'title' => $game['name'],
         ]);
     }
 

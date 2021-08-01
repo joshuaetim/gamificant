@@ -67,7 +67,7 @@ class GameController extends Controller
             'abbreviations' => isset($game['platforms']) ? collect($game['platforms'])->pluck('abbreviation')->implode(', ') : null,
             'company' => isset($game['involved_companies']) ? $game['involved_companies'][0]['company']['name'] : null,
             'genres' => isset($game['genres']) ? collect($game['genres'])->pluck('name')->implode(', ') : null,
-            'trailer' => isset($game['videos']) ? "https://youtube.com/embed/".$game['videos'][0]['video_id'] : null,
+            'trailer' => isset($game['videos']) ? $game['videos'][0]['video_id'] : null,
             'similar_games' => isset($game['similar_games']) ? collect($game['similar_games'])->map(function($game){
                 return [
                     'slug' => $game['slug'],
